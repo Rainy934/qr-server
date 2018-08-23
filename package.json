@@ -17,7 +17,12 @@
     "type": "git",
     "url": "git+https://github.com/Rainy934/qr-server.git"
   },
-  "keywords": ["static","web", "server", "http"],
+  "keywords": [
+    "static",
+    "web",
+    "server",
+    "http"
+  ],
   "author": "huanyu.xu",
   "license": "ISC",
   "bugs": {
