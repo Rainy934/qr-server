@@ -5,9 +5,12 @@ const Http = require('http');
 const Console = require('../utils/console');
 const rootPath = process.cwd();
 
+function now(){
+    return (new Date()).toUTCString();
+}
+
 let server = Http.createServer(function(req, res){
     var resPath = rootPath + req.url;
-    console.log(process.pid)
     fs.stat(resPath, function(err, stats){
         if(err){
             Console.err(resPath);
@@ -20,19 +23,19 @@ let server = Http.createServer(function(req, res){
                         Console.err(indexRes);
                         create404Response(res)
                     } else {
-                        Console.notice(indexRes);
-                        createResponse(indexRes, res)
+                        Console.notice(now() + ": " + indexRes);
+                        createResponse(indexRes, req, res)
                     };
                 })
             } else {
-                Console.notice(resPath);
-                createResponse(resPath, res)
+                Console.notice(now() + ": " + resPath);
+                createResponse(resPath, req, res)
             }
         }
     })
 })
 
-function createResponse(path, res){
+function createResponse(path, req, res){
     let bn = path.split('.').pop();
     let contentType = '';
     if(bn == 'jpg'){
@@ -45,6 +48,18 @@ function createResponse(path, res){
         contentType = 'video/mpeg4';
     }
     if(bn == 'html' || bn == 'htm'){
+        //获取文件修改时间 Last-Modify 缓存实现
+        var mtime = fs.statSync(path).mtime;
+        var lastModifyTime = req.headers['if-modified-since'];
+        if(lastModifyTime){
+            if(mtime == lastModifyTime) {
+                res.writeHead(304);
+                res.end();
+                return
+            }
+        } else {
+            res.setHeader('Last-Modified', mtime);
+        }
         contentType = 'text/html';
     }
     if(bn == 'css'){
@@ -56,7 +71,7 @@ function createResponse(path, res){
 
 function create404Response(res){
     res.setHeader('Content-Type','text/html');
-    fs.createReadStream(__dirname + '/template/404.html').pipe(res)
+    fs.createReadStream(process.cwd() + '/template/404.html').pipe(res)
 }
 
 function init(port){
