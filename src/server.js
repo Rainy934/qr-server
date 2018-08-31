@@ -79,6 +79,7 @@ function createResponse(path, req, res){
         res.setHeader('Content-Encoding', "gzip")
     }
     res.setHeader('Content-Type', contentType || 'application/octet-stream');
+    //开启gzip
     fs.createReadStream(path).pipe(zlib.createGzip()).pipe(res);
 }
 

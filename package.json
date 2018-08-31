@@ -1,18 +1,16 @@
 {
   "name": "qr-server",
-  "version": "1.0.2",
-  "description": "1. 支持html, mp3, mp4, css, jpg格式带MIMEType返回， 其他格式以二进制文件类型下载 2. 支持404提示 3. 支持文件夹默认向下寻找html文件打开 4. 支持端口号设定，若无，则随机选择空闲端口号 5. 支持将命令运行路径作为服务器根目录 6. 支持简单请求终端日志",
+  "version": "1.0.3",
+  "description": "An web server base on node",
   "main": "index.js",
   "bin": {
     "qr": "index.js"
   },
   "dependencies": {
-    "colors": "^1.2.4"
+    "colors": "^1.2.4",
+    "commander": "^2.17.1"
   },
   "devDependencies": {},
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Rainy934/qr-server.git"
