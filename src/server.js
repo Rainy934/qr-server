@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 const path = require('path');
+const zlib = require('zlib');
 const fs = require('fs');
 const Http = require('http');
 const Console = require('../utils/console');
@@ -40,12 +41,15 @@ function createResponse(path, req, res){
     let contentType = '';
     if(bn == 'jpg'){
         contentType = 'image/jpeg';
+        res.setHeader('Cache-Control', "max-age=86400");
     }
     if(bn == 'mp3'){
         contentType = 'audio/mp3';
+        res.setHeader('Cache-Control', "max-age=86400");
     }
     if(bn == 'mp4'){
         contentType = 'video/mpeg4';
+        res.setHeader('Cache-Control', "max-age=86400");
     }
     if(bn == 'html' || bn == 'htm'){
         //获取文件修改时间 Last-Modify 缓存实现
@@ -64,9 +68,18 @@ function createResponse(path, req, res){
     }
     if(bn == 'css'){
         contentType = 'text/css';
+        res.setHeader('Cache-Control', "max-age=86400");
+    }
+    if(bn == 'js'){
+        contentType = 'text/javascript';
+        res.setHeader('Cache-Control', "max-age=86400");
+    }
+
+    if(req.headers['accept-encoding'].match(/gzip/)){
+        res.setHeader('Content-Encoding', "gzip")
     }
     res.setHeader('Content-Type', contentType || 'application/octet-stream');
-    fs.createReadStream(path).pipe(res)
+    fs.createReadStream(path).pipe(zlib.createGzip()).pipe(res);
 }
 
 function create404Response(res){
