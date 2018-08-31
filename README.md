@@ -1,19 +1,38 @@
-## 静态服务器简单编程
-### 已完成功能点
-1. 支持html, mp3, mp4, css, jpg格式带MIMEType返回， 其他格式以二进制文件类型下载
-2. 支持404提示
-3. 支持文件夹默认向下寻找html文件打开
-4. 支持端口号设定，若无，则随机选择空闲端口号
-5. 支持将命令运行路径作为服务器根目录
-6. 支持简单请求终端日志
-7. 多进程处理请求，提升性能
-8. 浏览器缓存策略实现
-9. 支持gzip压缩
+## Get start
+    $ npm install qr-server -g
 
-### 浏览器缓存策略
-1. html文件 -- 协商缓存，Last-Modify，ETag
-2. 静态资源文件 -- 强制缓存， cache-control:max-age=86400
-3. 引用文件js等经常更新的文件可通过Html中加入版本号更新实现（有变更重新加载）
+## Usage
 
-### 即将处理
-1. Range支持，断点续传 
+    Usage: qr <command> [options]
+
+    Options:
+
+        -V, --version    output the version number
+        -h, --help       output usage information
+
+    Commands:
+
+        start [options]
+
+## Exampe
+    qr  start -p 3000
+
+## Description
+### Completed
+- Support html, mp3, mp4, css, jpg format with MIMEType return, other formats are downloaded as binary file type.
+- Support 404 prompt.
+- Support folder defaults to look for html files to open.
+- Support port number setting, if not, randomly select free port number.
+- Support for running the command run path as the server root directory.
+- Support simple request terminal log.
+- Multi-process processing requests to improve performance.
+- Browser cache policy implementation.
+- Support gzip compression.
+
+### Browser caching strategy 
+- Html file -- negotiated cache, Last-Modify, ETag.
+- Static resource file, forced cache, cache-control:max-age=86400.
+- Frequently updated files such as reference file js can be updated by adding version number in Html (with change reload).
+
+### Coming soon
+- Range support, breakpoint resume
