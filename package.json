@@ -1,10 +1,10 @@
 {
   "name": "qr-server",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "An web server base on node",
   "main": "index.js",
   "bin": {
-    "qr": "index.js"
+    "qr": "./bin/qr.js"
   },
   "scripts": {
     "test": "node test/test.js"

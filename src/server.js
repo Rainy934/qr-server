@@ -85,7 +85,7 @@ function createResponse(path, req, res){
 
 function create404Response(res){
     res.setHeader('Content-Type','text/html');
-    fs.createReadStream(process.cwd() + '/template/404.html').pipe(res)
+    fs.createReadStream(path.join(__dirname,'../') + 'template/404.html').pipe(res)
 }
 
 function init(port){
