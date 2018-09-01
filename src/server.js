@@ -74,13 +74,31 @@ function createResponse(path, req, res){
         contentType = 'text/javascript';
         res.setHeader('Cache-Control', "max-age=86400");
     }
-
-    if(req.headers['accept-encoding'].match(/gzip/)){
+    
+    if(req.headers['accept-encoding'] && req.headers['accept-encoding'].match(/gzip/)){
         res.setHeader('Content-Encoding', "gzip")
     }
+
+    //断点续传
+    var size = fs.statSync(path).size;
+    let start = 0;
+    let end = size - 1;
+    let range = req.headers['range'];
+
+    if (range) {
+        res.setHeader('Accept-Range', 'bytes');
+        res.statusCode = 206;
+        let result = range.match(/bytes=(\d*)-(\d*)/);
+        if (result) {
+            start = isNaN(result[1]) ? start : parseInt(result[1]);
+            end = isNaN(result[2]) ? end : parseInt(result[2]) - 1;
+        }
+        res.setHeader('Content-Range', `bytes=${start}-${end}/${size}`);
+    }
+
     res.setHeader('Content-Type', contentType || 'application/octet-stream');
     //开启gzip
-    fs.createReadStream(path).pipe(zlib.createGzip()).pipe(res);
+    fs.createReadStream(path, {start, end}).pipe(zlib.createGzip()).pipe(res);
 }
 
 function create404Response(res){
