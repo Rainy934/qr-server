@@ -87,7 +87,7 @@ function createResponse(path, req, res){
 
     if (range) {
         res.setHeader('Accept-Range', 'bytes');
-        res.statusCode = 206;
+        res.writeHead(206);
         let result = range.match(/bytes=(\d*)-(\d*)/);
         if (result) {
             start = isNaN(result[1]) ? start : parseInt(result[1]);
